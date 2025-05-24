@@ -1,0 +1,31 @@
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_nilo
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: railway
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./src/lib/db:/docker-entrypoint-initdb.d
+    networks:
+      - mysql_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma_nilo
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    networks:
+      - mysql_network
+
+networks:
+  mysql_network:
+    driver: bridge
